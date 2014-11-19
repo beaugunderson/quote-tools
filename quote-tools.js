@@ -106,7 +106,7 @@ var unquote = exports.unquote = function (sentence) {
 
 exports.fullPipeline = function (sentences) {
   return sentences
-    .map(sentenceTools.collapseSpaces)
+    .map(sentenceTools.normalizeWhitespace)
     .map(unquote)
     .map(sentenceTools.compress)
     .map(sentenceTools.capitalize)
