@@ -60,6 +60,10 @@ var unquote = exports.unquote = function (sentence) {
 
   var pronoun = sentence.match(PRONOUN_RE);
 
+  if (!pronoun) {
+    return null;
+  }
+
   // Compound quote
   if (COMPOUND_QUOTE_RE.test(sentence)) {
     modified = sentence.replace(COLLAPSE_COMPOUND_QUOTE_RE, ' ');

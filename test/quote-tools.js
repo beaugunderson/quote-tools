@@ -1,6 +1,6 @@
 'use strict';
 
-require('chai').should();
+var should = require('chai').should();
 
 var sentence = require('..');
 
@@ -24,6 +24,13 @@ describe('quote-tools', function () {
       it("should unquote '" + pair[0] + "'", function () {
         sentence.unquote(pair[0]).should.deep.equal(pair[1]);
       });
+    });
+
+    it('should not unquote a sentence without a quote', function () {
+      var topic = 'However, she said that taking provocative photos ' +
+        'aren\'t for everybody.';
+
+      should.not.exist(sentence.unquote(topic));
     });
   });
 });
