@@ -25,6 +25,12 @@ describe('quote-tools', function () {
       '"blah bleh", zie said, "bluh bloh"-- \t',
       {pronoun: 'zie', unquoted: 'blah bleh bluh bloh'}
     ], [
+      'She said: "Love won today"',
+      {pronoun: 'she', unquoted: 'Love won today'}
+    ], [
+      '"Love won today," she said, excitedly',
+      {pronoun: 'she', unquoted: 'Love won today'}
+    ], [
       '\t \t "Blah blah blah", she said.  ',
       {pronoun: 'she', unquoted: 'Blah blah blah'}
     ]];

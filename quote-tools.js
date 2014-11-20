@@ -21,14 +21,14 @@ var PRONOUNS = exports.PRONOUNS = [
 ];
 
 var PRONOUNS_RE = '(' + PRONOUNS.join('|') + ')';
-var PRONOUN_RE = new RegExp('[\'"],* *' + PRONOUNS_RE + ' +said', 'i');
+
+var PRONOUN_BEGIN_RE = new RegExp(PRONOUNS_RE + ' +said[;:, ]*(?=[\'"])', 'i');
+var PRONOUN_END_RE = new RegExp('([\'"])[, ]*' + PRONOUNS_RE + ' +said.*', 'i');
 
 var COMPOUND_QUOTE_RE = new RegExp(PRONOUNS_RE + ' +said,? *[\'"]', 'i');
 
 var COLLAPSE_COMPOUND_QUOTE_RE = new RegExp('[\'"],* *' + PRONOUNS_RE +
                                             ' +said,? *[\'"]', 'i');
-
-var STRIP_END_RE = new RegExp(',* *' + PRONOUNS_RE + ' +said[.,]?', 'i');
 
 var singleQuotes = exports.singleQuotes = function (sentence) {
   var matches = sentence.match(/^\s*'|'\s*$/g);
@@ -47,8 +47,38 @@ var evenQuotes = exports.evenQuotes = function (sentence) {
          doubleQuotes(sentence) % 2 === 0;
 };
 
+var findPronoun = exports.findPronoun = function (sentence) {
+  var middle = sentence.match(COMPOUND_QUOTE_RE);
+
+  if (middle) {
+    return middle[1].toLowerCase();
+  }
+
+  var begin = sentence.match(PRONOUN_BEGIN_RE);
+
+  if (begin) {
+    return begin[1].toLowerCase();
+  }
+
+  var end = sentence.match(PRONOUN_END_RE);
+
+  if (end) {
+    return end[2].toLowerCase();
+  }
+};
+
+var stripPronoun = exports.stripPronoun = function (sentence) {
+  if (sentence.match(PRONOUN_BEGIN_RE)) {
+    return sentence.replace(PRONOUN_BEGIN_RE, '');
+  } else if (sentence.match(PRONOUN_END_RE)) {
+    return sentence.replace(PRONOUN_END_RE, '$1');
+  }
+
+  return sentence;
+};
+
 var unquote = exports.unquote = function (sentence) {
-  var pronoun = sentence.match(PRONOUN_RE);
+  var pronoun = findPronoun(sentence);
 
   if (!pronoun) {
     return null;
@@ -60,7 +90,7 @@ var unquote = exports.unquote = function (sentence) {
   if (COMPOUND_QUOTE_RE.test(sentence)) {
     modified = sentence.replace(COLLAPSE_COMPOUND_QUOTE_RE, ' ');
   } else {
-    modified = sentence.replace(STRIP_END_RE, '');
+    modified = stripPronoun(sentence);
   }
 
   // Remove dangling punctation if it's the only before or after a quote
@@ -93,7 +123,7 @@ var unquote = exports.unquote = function (sentence) {
     .replace(/[, ]+$/, '');
 
   return {
-    pronoun: pronoun[1],
+    pronoun: pronoun,
     unquoted: modified
   };
 };
