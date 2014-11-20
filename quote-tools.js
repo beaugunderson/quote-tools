@@ -31,23 +31,15 @@ var COLLAPSE_COMPOUND_QUOTE_RE = new RegExp('[\'"],* *' + PRONOUNS_RE +
 var STRIP_END_RE = new RegExp(',* *' + PRONOUNS_RE + ' +said[.,]?', 'i');
 
 var singleQuotes = exports.singleQuotes = function (sentence) {
-  var matches = sentence.match(/(^|[^\w])[']+|[']+([^\w]|$)/);
+  var matches = sentence.match(/^\s*'|'\s*$/g);
 
-  if (matches) {
-    return matches.length;
-  }
-
-  return 0;
+  return matches ? matches.length : 0;
 };
 
 var doubleQuotes = exports.doubleQuotes = function (sentence) {
-  var matches = sentence.match(/(^|[^\w])["]+|["]+([^\w]|$)/);
+  var matches = sentence.match(/^\s*"|"\s*$/g);
 
-  if (matches) {
-    return matches.length;
-  }
-
-  return 0;
+  return matches ? matches.length : 0;
 };
 
 var evenQuotes = exports.evenQuotes = function (sentence) {
@@ -56,13 +48,13 @@ var evenQuotes = exports.evenQuotes = function (sentence) {
 };
 
 var unquote = exports.unquote = function (sentence) {
-  var modified;
-
   var pronoun = sentence.match(PRONOUN_RE);
 
   if (!pronoun) {
     return null;
   }
+
+  var modified;
 
   // Compound quote
   if (COMPOUND_QUOTE_RE.test(sentence)) {
@@ -71,8 +63,9 @@ var unquote = exports.unquote = function (sentence) {
     modified = sentence.replace(STRIP_END_RE, '');
   }
 
-  // Remove dangling punctation if it's the only thing past a quote
-  modified = modified.replace(/(['"])[,. -]+$/, '$1');
+  // Remove dangling punctation if it's the only before or after a quote
+  modified = modified.replace(/(['"])[,.-\s]+$/, '$1');
+  modified = modified.replace(/^[,.-\s]+(['"])/, '$1');
 
   // If the entire sentence is wrapped in '
   if (modified.match(/^'.*'$/)) {
@@ -90,6 +83,7 @@ var unquote = exports.unquote = function (sentence) {
   }
 
   if (singleQuotes(modified) === 1) {
+    // Remove any trailing commas, quotes, and spaces
     modified = modified.replace(/^ *'* *| *'*,*'* *$/, '');
   }
 
