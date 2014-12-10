@@ -26,6 +26,7 @@
   "homepage": "https://github.com/beaugunderson/node-quote-tools",
   "devDependencies": {
     "chai": "^1.10.0",
+    "chalk": "^0.5.1",
     "mocha": "^2.0.1"
   },
   "dependencies": {

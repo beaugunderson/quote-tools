@@ -37,14 +37,22 @@ var singleQuotes = exports.singleQuotes = function (sentence) {
 };
 
 var doubleQuotes = exports.doubleQuotes = function (sentence) {
-  var matches = sentence.match(/^\s*"|"\s*$/g);
+  // TODO: Is there any reason to treat this like singleQuotes?
+  var matches = sentence.match(/"/g);
 
   return matches ? matches.length : 0;
 };
 
+var evenSingleQuotes = exports.evenSingleQuotes = function (sentence) {
+  return singleQuotes(sentence) % 2 === 0;
+};
+
+var evenDoubleQuotes = exports.evenDoubleQuotes = function (sentence) {
+  return doubleQuotes(sentence) % 2 === 0;
+};
+
 var evenQuotes = exports.evenQuotes = function (sentence) {
-  return singleQuotes(sentence) % 2 === 0 &&
-         doubleQuotes(sentence) % 2 === 0;
+  return evenSingleQuotes(sentence) && evenDoubleQuotes(sentence);
 };
 
 var findPronoun = exports.findPronoun = function (sentence) {
@@ -93,7 +101,7 @@ var unquote = exports.unquote = function (sentence) {
     modified = stripPronoun(sentence);
   }
 
-  // Remove dangling punctation if it's the only before or after a quote
+  // Remove dangling punctation if it's the only thing before or after a quote
   modified = modified.replace(/(['"])[,.-\s]+$/, '$1');
   modified = modified.replace(/^[,.-\s]+(['"])/, '$1');
 
