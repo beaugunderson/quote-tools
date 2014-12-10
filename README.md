@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/beaugunderson/node-quote-tools.svg)](https://travis-ci.org/beaugunderson/node-quote-tools)
+
 ## quote-tools
 
 ### Installation
