@@ -11,6 +11,9 @@ describe('unquote', function () {
     ['"I don\'t know," she said, "maybe it\'s fate."',
      {pronoun: 'she', unquoted: 'I don\'t know, maybe it\'s fate.'}],
 
+    ['"Yes", she yelled, "I\'m free!"',
+     {pronoun: 'she', unquoted: "Yes I'm free!"}],
+
     ['"blah bleh", they said, "bluh bloh".',
      {pronoun: 'they', unquoted: 'blah bleh bluh bloh'}],
 

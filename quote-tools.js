@@ -2,6 +2,21 @@
 
 var sentenceTools = require('sentence-tools');
 
+// TODO: Handle these automatically?
+var ACTIONS = exports.ACTIONS = [
+  'answered',
+  'asked',
+  'claimed',
+  'insisted',
+  'replied',
+  'said',
+  'shouted',
+  'squealed',
+  'whispered',
+  'yelled'
+];
+
+// TODO: Handle names too?
 var PRONOUNS = exports.PRONOUNS = [
   'co',
   'e',
@@ -20,15 +35,21 @@ var PRONOUNS = exports.PRONOUNS = [
   'zie'
 ];
 
+var ACTIONS_RE = '(' + ACTIONS.join('|') + ')';
 var PRONOUNS_RE = '(' + PRONOUNS.join('|') + ')';
 
-var PRONOUN_BEGIN_RE = new RegExp(PRONOUNS_RE + ' +said[;:, ]*(?=[\'"])', 'i');
-var PRONOUN_END_RE = new RegExp('([\'"])[, ]*' + PRONOUNS_RE + ' +said.*', 'i');
+var PRONOUN_BEGIN_RE = new RegExp(PRONOUNS_RE + ' +' + ACTIONS_RE +
+                                  '[;:, ]*(?=[\'"])', 'i');
 
-var COMPOUND_QUOTE_RE = new RegExp(PRONOUNS_RE + ' +said,? *[\'"]', 'i');
+var PRONOUN_END_RE = new RegExp('([\'"])[, ]*' + PRONOUNS_RE + ' +' +
+                                ACTIONS_RE + '.*', 'i');
+
+var COMPOUND_QUOTE_RE = new RegExp(PRONOUNS_RE + ' +' + ACTIONS_RE +
+                                   ',? *[\'"]', 'i');
 
 var COLLAPSE_COMPOUND_QUOTE_RE = new RegExp('[\'"],* *' + PRONOUNS_RE +
-                                            ' +said,? *[\'"]', 'i');
+                                            ' +' + ACTIONS_RE + ',? *[\'"]',
+                                            'i');
 
 var singleQuotes = exports.singleQuotes = function (sentence) {
   var matches = sentence.match(/^\s*'|'\s*$/g);
