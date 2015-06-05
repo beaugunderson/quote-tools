@@ -1,6 +1,6 @@
 {
   "name": "quote-tools",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Tools for working with quotations",
   "main": "quote-tools.js",
   "directories": {
@@ -19,17 +19,17 @@
     "pronouns"
   ],
   "author": "Beau Gunderson <beau@beaugunderson.com>",
-  "license": "BSD",
+  "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/beaugunderson/node-quote-tools/issues"
   },
   "homepage": "https://github.com/beaugunderson/node-quote-tools",
   "devDependencies": {
-    "chai": "^1.10.0",
-    "chalk": "^0.5.1",
-    "mocha": "^2.0.1"
+    "chai": "^3.0.0",
+    "chalk": "^1.0.0",
+    "mocha": "^2.2.5"
   },
   "dependencies": {
-    "sentence-tools": "^3.2.0"
+    "sentence-tools": "^3.3.0"
   }
 }
